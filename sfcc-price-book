@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+namespace SPARC\SFCCPriceBook;
+require __DIR__ . '/vendor/autoload.php';
+
+date_default_timezone_set('UTC');
+
+ini_set('log_errors_max_len', 0);
+ini_set('max_execution_time', 0);
+ini_set('memory_limit', '2048M');
+posix_setrlimit(\POSIX_RLIMIT_NOFILE, \POSIX_RLIMIT_INFINITY, \POSIX_RLIMIT_INFINITY);
+
+$cli = new CLI();

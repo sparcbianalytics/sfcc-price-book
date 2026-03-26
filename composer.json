@@ -1,0 +1,27 @@
+{
+    "name": "sparc/sfcc-price-book",
+    "description": "Parses SFCC Price book XML to CSV",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "ext-iconv": "*",
+        "ext-mbstring": "*",
+        "jkingweb/druuid": "^3.0",
+        "mensbeam/catcher-awsnshandler": "^1.0",
+        "mensbeam/catcher": "^2.1",
+        "mensbeam/logger": "^1.3",
+        "aws/aws-sdk-php": "^3.374",
+        "docopt/docopt": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SPARC\\SFCCPriceBook\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Dustin Wilson",
+            "email": "dustin.wilson@catalystbrands.com"
+        }
+    ]
+}
