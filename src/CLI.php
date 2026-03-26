@@ -18,7 +18,7 @@ class CLI extends AbstractInterface {
 
     Options:
         -h --help                    Show this screen
-        -a --add-timestamp           Add a timestamp to the filename
+        -q --quiet                   Quiet mode
         -d --debug                   Debug mode
     USAGE_TEXT;
 
