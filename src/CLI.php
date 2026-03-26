@@ -13,7 +13,7 @@ use Aws\S3\S3Client,
 class CLI extends AbstractInterface {
     public const USAGE = <<<USAGE_TEXT
     Usage:
-        sfcc-price-book [options] <source_file> <destination_file>
+        sfcc-price-book [options] <source_file> <destination_path>
         sfcc-price-book -h | --help
 
     Options:
@@ -33,7 +33,7 @@ class CLI extends AbstractInterface {
         // If debug is true quiet doesn't matter
         $this->quiet = (!$this->debug) ? $args['--quiet'] ?? false : false;
         $this->sourceFile = $args['<source_file>'];
-        $this->destinationFile = $args['<destination_file>'];
+        $this->destinationPath = $args['<destination_path>'];
         parent::__construct();
         $this->dispatch();
     }
@@ -53,7 +53,7 @@ class CLI extends AbstractInterface {
             throw new \Exception('<source_path> must contain an s3 key');
         }
 
-        $parts = explode('/', Path::normalize($this->destinationFile));
+        $parts = explode('/', Path::normalize($this->destinationPath));
         if ($parts < 1) {
             throw new \Exception('<destination_path> must contain an s3 bucket');
         }
@@ -70,7 +70,6 @@ class CLI extends AbstractInterface {
         $context = stream_context_create([ 's3' => [ 'seekable' => true ] ]);
 
         $sourceFullPath = Path::join($sourceBucket, $sourceKey);
-        $sourcePath = Path::getDirectory($sourceKey);
         // Some files can have multiple file extensions, separate them all
         preg_match('/^(.+?)((?:\.[a-z0-9]+)+)?$/i', basename($sourceKey), $m);
         $sourceBaseName = $m[1];
@@ -87,14 +86,13 @@ class CLI extends AbstractInterface {
         $destinationPath = implode('/', $parts);
 
         $destinationBaseName = $sourceBaseName;
-        $destinationFileName = $tempFileName = Path::join("$destinationBaseName.csv");
-        $destinationKey = Path::join($destinationPath, $destinationFileName);
+        $destinationPathName = $tempFileName = Path::join("$destinationBaseName.csv");
+        $destinationKey = Path::join($destinationPath, $destinationPathName);
         $destinationFullPath = Path::join($destinationBucket, $destinationKey);
 
         Runtime::$logger->info('Opening file s3://%s', [ $sourceFullPath ]);
 
         $UUID = UUID::mintStr();
-        $subUUID = UUID::mintStr(3, $sourceFullPath, $UUID);
         $tempFolder = (!$this->debug) ? "/tmp/sfcc-price-book/$UUID" : Runtime::$cwd . "/debug/$UUID";
         Fs::mkdir($tempFolder, 0770);
         $tempFileFullPath = Path::join ($tempFolder, $tempFileName);

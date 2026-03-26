@@ -8,7 +8,7 @@ abstract class AbstractInterface {
     public const VERSION = '1.0.0';
 
     public bool $debug = false;
-    public string $destinationFile;
+    public string $destinationPath;
     public bool $quiet = false;
     public string $sourceFile;
 
