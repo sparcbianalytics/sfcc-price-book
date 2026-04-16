@@ -76,7 +76,8 @@ class CLI extends AbstractInterface {
         $sourceExt = trim($m[2] ?? '', '.');
         $sourceExt = ($sourceExt !== '') ? ".$sourceExt" : '';
 
-        if ($sourceExt !== '.xml') {
+        $lastExt = '.' . pathinfo($sourceKey, \PATHINFO_EXTENSION);
+        if ($lastExt !== '.xml') {
             Runtime::$logger->info('Source file s3://%s does not have a file extension supported by this tool (*.xml); exiting', [ $sourceFullPath ]);
             return;
         }
